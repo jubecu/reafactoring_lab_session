@@ -218,9 +218,9 @@ public class Network {
 		do {
 			try {
 				String cad="' accepts broadcase packet.\n";
-				logging(report, currentNode, cad);
+				currentNode.logging(report, cad);
 				cad="' passes packet on.\n";
-				logging(report, currentNode, cad);
+				currentNode.logging(report, cad);
 			} catch (IOException exc) {
 				// just ignore
 			}
@@ -235,13 +235,6 @@ public class Network {
 		}
 		;
 		return true;
-	}
-
-	public void logging(Writer report, Node currentNode, String cad) throws IOException {
-		report.write("\tNode '");
-		report.write(currentNode.name_);
-		report.write(cad);
-		report.flush();
 	}
 
 	/**
@@ -291,7 +284,7 @@ public class Network {
 
 		try {
 			String cad="' passes packet on.\n";
-			logging(report, startNode, cad);
+			startNode.logging(report, cad);
 		} catch (IOException exc) {
 			// just ignore
 		}
@@ -300,7 +293,7 @@ public class Network {
 		while ((!packet.destination_.equals(currentNode.name_)) & (!packet.origin_.equals(currentNode.name_))) {
 			try {
 				String cad="' passes packet on.\n";
-				logging(report, currentNode, cad);
+				currentNode.logging(report, cad);
 			} catch (IOException exc) {
 				// just ignore
 			}
