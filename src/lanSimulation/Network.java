@@ -185,7 +185,7 @@ public class Network {
 			return false;
 		}
 		; // not all workstations are registered
-		// all verifications succeedeed
+			// all verifications succeedeed
 		return true;
 	}
 
@@ -217,9 +217,9 @@ public class Network {
 		Packet packet = new Packet("BROADCAST", firstNode_.name_, firstNode_.name_);
 		do {
 			try {
-				String cad="' accepts broadcase packet.\n";
+				String cad = "' accepts broadcase packet.\n";
 				currentNode.logging(report, cad);
-				cad="' passes packet on.\n";
+				cad = "' passes packet on.\n";
 				currentNode.logging(report, cad);
 			} catch (IOException exc) {
 				// just ignore
@@ -227,7 +227,6 @@ public class Network {
 			;
 			currentNode = currentNode.nextNode_;
 		} while (atDestination(currentNode, packet));
-
 		try {
 			report.write(">>> Broadcast travelled whole token ring.\n\n");
 		} catch (IOException exc) {
@@ -287,7 +286,7 @@ public class Network {
 		startNode = (Node) workstations_.get(workstation);
 
 		try {
-			String cad="' passes packet on.\n";
+			String cad = "' passes packet on.\n";
 			startNode.logging(report, cad);
 		} catch (IOException exc) {
 			// just ignore
@@ -296,7 +295,7 @@ public class Network {
 		currentNode = startNode.nextNode_;
 		while (atDestination(currentNode, packet) & (!packet.origin_.equals(currentNode.name_))) {
 			try {
-				String cad="' passes packet on.\n";
+				String cad = "' passes packet on.\n";
 				currentNode.logging(report, cad);
 			} catch (IOException exc) {
 				// just ignore
@@ -353,28 +352,7 @@ public class Network {
 		assert isInitialized();
 		Node currentNode = firstNode_;
 		do {
-			switch (currentNode.type_) {
-			case Node.NODE:
-				buf.append("Node ");
-				buf.append(currentNode.name_);
-				buf.append(" [Node]");
-				break;
-			case Node.WORKSTATION:
-				buf.append("Workstation ");
-				buf.append(currentNode.name_);
-				buf.append(" [Workstation]");
-				break;
-			case Node.PRINTER:
-				buf.append("Printer ");
-				buf.append(currentNode.name_);
-				buf.append(" [Printer]");
-				break;
-			default:
-				buf.append("(Unexpected)");
-				;
-				break;
-			}
-			;
+			currentNode.printOn(buf);
 			buf.append(" -> ");
 			currentNode = currentNode.nextNode_;
 		} while (currentNode != firstNode_);
@@ -395,28 +373,7 @@ public class Network {
 		buf.append("\n\n<UL>");
 		do {
 			buf.append("\n\t<LI> ");
-			switch (currentNode.type_) {
-			case Node.NODE:
-				buf.append("Node ");
-				buf.append(currentNode.name_);
-				buf.append(" [Node]");
-				break;
-			case Node.WORKSTATION:
-				buf.append("Workstation ");
-				buf.append(currentNode.name_);
-				buf.append(" [Workstation]");
-				break;
-			case Node.PRINTER:
-				buf.append("Printer ");
-				buf.append(currentNode.name_);
-				buf.append(" [Printer]");
-				break;
-			default:
-				buf.append("(Unexpected)");
-				;
-				break;
-			}
-			;
+			currentNode.printOn(buf);
 			buf.append(" </LI>");
 			currentNode = currentNode.nextNode_;
 		} while (currentNode != firstNode_);
@@ -436,28 +393,7 @@ public class Network {
 		buf.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<network>");
 		do {
 			buf.append("\n\t");
-			switch (currentNode.type_) {
-			case Node.NODE:
-				buf.append("<node>");
-				buf.append(currentNode.name_);
-				buf.append("</node>");
-				break;
-			case Node.WORKSTATION:
-				buf.append("<workstation>");
-				buf.append(currentNode.name_);
-				buf.append("</workstation>");
-				break;
-			case Node.PRINTER:
-				buf.append("<printer>");
-				buf.append(currentNode.name_);
-				buf.append("</printer>");
-				break;
-			default:
-				buf.append("<unknown></unknown>");
-				;
-				break;
-			}
-			;
+			currentNode.printXMLOn(buf);
 			currentNode = currentNode.nextNode_;
 		} while (currentNode != firstNode_);
 		buf.append("\n</network>");
